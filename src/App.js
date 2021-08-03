@@ -1,12 +1,6 @@
 import './App.css';
 import Contacts from "./components/Contacts";
 
-
-
-
-
-
-
 function App() {
   return (
     <div className="App">
@@ -14,7 +8,5 @@ function App() {
     </div>
   );
 }
-
-
 
 export default App;
