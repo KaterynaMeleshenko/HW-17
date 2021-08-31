@@ -80,10 +80,11 @@ const Contacts = () => {
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
+    setContacts(contactsFiltered)
   }
 
   useEffect(() => {
-    const searchedContacts = contacts.filter( contact => {
+    const searchedContacts = contactsFiltered.filter( contact => {
       return Object.values(contact).some( element => 
         element.toString().toLowerCase().search(search) >= 0 ) ;
     })
@@ -96,23 +97,56 @@ const Contacts = () => {
     <div className="inner"> 
       <div className="header">MY CONTACTS</div>
       <div className="input">
-        <input className="input" placeholder="SEARCH" type="search" name="search" onChange={handleSearchChange} value={search}/>
+        <input 
+          className="input" 
+          placeholder="SEARCH" 
+          type="search" 
+          name="search" 
+          onChange={handleSearchChange} 
+          value={search}/>
       </div> 
       <div className="boxes">
-        <input className="box-male" type="checkbox" id="0" name="male" value="male" checked={isChecked[0]} onChange={handlerCheckBoxes}/>male
-        <input className="box-female" type="checkbox" id="1" name="female" value="female" checked={isChecked[1]} onChange={handlerCheckBoxes}/>female
-        <input className="box-undefined" type="checkbox" id="2" name="undefined" value="undefined" checked={isChecked[2]} onChange={handlerCheckBoxes}/>undefined
+        <input 
+          className="box-male"
+          type="checkbox"
+          id="0"
+          name="male"
+          value="male"
+          checked={isChecked[0]}
+          onChange={handlerCheckBoxes}/>
+          male
+        <input   
+          className="box-female" 
+          type="checkbox" 
+          id="1" 
+          name="female" 
+          value="female" 
+          checked={isChecked[1]} 
+          onChange={handlerCheckBoxes}/>
+          female
+        <input 
+          className="box-undefined" 
+          type="checkbox"
+          id="2"
+          name="undefined"
+          value="undefined"
+          checked={isChecked[2]}
+          onChange={handlerCheckBoxes}/>
+          undefined
       </div> 
-      <div className="mainblock"> { 
-        contactsFiltered.map(contact => 
-        
-        <Contact key = {contact.id}
-        firstName = {contact.firstName}
-        lastName = {contact.lastName}
-        phone = {contact.phone}
-        gender = {contact.gender}
-        />)
-      } </div>
+      <div className="mainblock"> 
+      { 
+        contactsFiltered.map(({ id, firstName, lastName, phone, gender }) => (
+          <Contact 
+            key = {id}
+            firstName = {firstName}
+            lastName = {lastName}
+            phone = {phone}
+            gender = {gender}
+          />
+        ))
+      } 
+      </div>
       <div className="othericons">
         <div className="star"><BiStar/></div>
         <div className="clock"> <BsClock/></div>

@@ -15,7 +15,9 @@ const Contact = ({firstName, lastName, phone, gender, id}) => {
         <div className="mainInfo"> 
           <span className="firstName">{firstName} </span>
           <span className="lastName">{lastName} </span>
-          <span className="gender">  {gender === "male" ? iconMale : gender === "female" ? iconFemale : iconUndefined}</span>
+          <span className="gender">
+            {gender === "male" ? iconMale : gender === "female" ? iconFemale : iconUndefined}
+          </span>
         </div>
         <div className="phone"> {phone} </div>
       </div>
