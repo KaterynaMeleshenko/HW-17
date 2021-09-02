@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Contact from "./Contact";
-
 import { BiStar } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 import { MdContacts } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { MdSettingsPower } from "react-icons/md";
-
+import Contact from "./Contact";
 import "./contacts.css";
 
-const contacts = [ 
+const defaultContacts = [ 
     {
     id: 0,
     firstName: "Барней",
@@ -48,50 +46,51 @@ const contacts = [
   } ]
 
 const Contacts = () => {
-  const [contactsFiltered, setContacts] = useState(contacts);
+  const [contacts, setContacts] = useState(defaultContacts)
+  const [filteredContacts, setFilteredContacts] = useState([]);
   const [search, setSearch] = useState("");
   const [isChecked, setIsChecked] = useState([true, true, true]);
-  const genders = ["male", "female", undefined];
+  //const genders = ["male", "female", undefined];
    
   const handlerCheckBoxes = (e) => {
     const id = e.target.id;
     const updateIsChecked = isChecked.map( (item, index) =>
-      index == id ? !item : item);
-      
+      index === +id ? !item : item);  
     setIsChecked(updateIsChecked);
   }
   
   useEffect(() => {
-    const filteredContacts = [].sort();
+    let newFilteredContacts = contacts;
     
-    isChecked.forEach( (element, index) => {
-      if (element === true) {
-        contacts.forEach(contact => {
-          if (contact.gender === genders[index]) {
-            filteredContacts.push(contact);
-          }
-        })
-      }
+    newFilteredContacts = newFilteredContacts.filter(el => {
+      return (
+        (el.gender === "male" && isChecked[0]) ||
+        (el.gender === "female" && isChecked[1]) ||
+        (el.gender === undefined && isChecked[2])
+      );
     })
-    
-  setContacts(filteredContacts);
+  
 
-  }, [isChecked]);
+    
+    if (search) {
+      newFilteredContacts = newFilteredContacts.filter(el => {
+        const { firstName, lastName, phone } = el;
+
+        return (
+          firstName.toLowerCase().includes(search.toLowerCase()) ||
+          lastName.toLowerCase().includes(search.toLowerCase()) ||
+          phone.includes(search)
+        );
+      });
+    };
+    
+  setFilteredContacts(newFilteredContacts);
+
+  }, [isChecked, search, contacts]);
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    setContacts(contactsFiltered)
   }
-
-  useEffect(() => {
-    const searchedContacts = contactsFiltered.filter( contact => {
-      return Object.values(contact).some( element => 
-        element.toString().toLowerCase().search(search) >= 0 ) ;
-    })
-            
-  setContacts(searchedContacts);
-            
-  }, [search]);
 
   return (
     <div className="inner"> 
@@ -136,7 +135,7 @@ const Contacts = () => {
       </div> 
       <div className="mainblock"> 
       { 
-        contactsFiltered.map(({ id, firstName, lastName, phone, gender }) => (
+        filteredContacts.map(({ id, firstName, lastName, phone, gender }) => (
           <Contact 
             key = {id}
             firstName = {firstName}
